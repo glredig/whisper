@@ -1,0 +1,25 @@
+{
+  "name": "whisper",
+  "version": "1.0.0",
+  "description": "Cross browser event listening using a single listener and delegation",
+  "main": "whisper.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/glredig/whisper.git"
+  },
+  "author": "Gabriel Redig",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/glredig/whisper/issues"
+  },
+  "homepage": "https://github.com/glredig/whisper#readme",
+  "devDependencies": {
+    "chai": "^3.4.0",
+    "gulp": "^3.9.0",
+    "gulp-mocha-phantomjs": "^0.10.1",
+    "mocha": "^2.3.3"
+  }
+}
