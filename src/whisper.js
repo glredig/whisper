@@ -3,54 +3,62 @@
 		return $W;
 	}
 
-	window.eventsCache = {};
-
-	var add;
+	eventsCache = {};
 
 	//
 	if (typeof addEventListener === 'function') {
 		document.addEventListener('click', function(e) {
-			var el = e.target;
-			if (window.eventsCache[el] !== undefined) {
-				for (var i = 0; i < window.eventsCache[el]['click'].length; i++) {
-					window.eventsCache[el]['click'][i]();
+			var el = e.target,
+				ident = e.target.getAttribute('data-whisper-id');
+
+			if (eventsCache[ident] !== undefined && eventsCache[ident]['click'] !== undefined) {
+				for (var i = 0; i < eventsCache[ident]['click'].length; i++) {
+					eventsCache[ident]['click'][i]();
 				}
 			}
 		});
 	}
 
 	function addListener(el, event, callback) {
-		if (window.eventsCache[el] !== undefined) {
-			if (window.eventsCache[el][event] !== undefined) {
-				window.eventsCache[el][event].push(callback);
+		var ident = el.getAttribute('data-whisper-id') === null ? generateId() : el.getAttribute('data-whisper-id');
+		
+		el.setAttribute('data-whisper-id', ident);
+
+		if (eventsCache[ident] !== undefined) {
+			if (eventsCache[ident][event] !== undefined) {
+				eventsCache[ident][event].push(callback);
 			}
 			else {
-				window.eventsCache[el][event] = [callback];
+				eventsCache[ident][event] = [callback];
 			}
 		}
 		else {
-			window.eventsCache[el] = {};
-			window.eventsCache[el][event] = [callback];
-			console.log(window.eventsCache[el]);
+			eventsCache[ident] = {};
+			eventsCache[ident][event] = [callback];
 		}
 	}
 
 	function removeListener(el, event, callback) {
-		if (window.eventsCache[el] !== undefined) {
+		var ident = el.getAttribute('data-whisper-id') === null ? generateId() : el.getAttribute('data-whisper-id');
+		if (eventsCache[ident] !== undefined) {
 			if (callback === undefined) {
-				if (window.eventsCache[el][event] !== undefined) {
-					window.eventsCache[el][event] = undefined;
+				if (eventsCache[ident][event] !== undefined) {
+					eventsCache[ident][event] = undefined;
 				}
 			}
 			else {
-				if (window.eventsCache[el][event] !== undefined) {
-					window.eventsCache[el][event].splice(indexOf(callback), 1);
+				if (eventsCache[ident][event] !== undefined) {
+					eventsCache[ident][event].splice(indexOf(callback), 1);
 				}
 				else {
-					window.eventsCache[el][event] = [callback];
+					eventsCache[ident][event] = [callback];
 				}
 			}
 		}
+	}
+
+	function generateId() {
+		return Math.floor(Math.random() * 1000000) + ((new Date).getTime()).toString();
 	}
 
 	window.$W = function(el) {
