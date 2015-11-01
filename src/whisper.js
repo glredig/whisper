@@ -8,15 +8,24 @@
 	//
 	if (typeof addEventListener === 'function') {
 		document.addEventListener('click', function(e) {
-			var el = e.target,
-				ident = e.target.getAttribute('data-whisper-id');
-
-			if (eventsCache[ident] !== undefined && eventsCache[ident]['click'] !== undefined) {
-				for (var i = 0; i < eventsCache[ident]['click'].length; i++) {
-					eventsCache[ident]['click'][i]();
-				}
-			}
+			fireCallbacks(e);
 		});
+	}
+	else if (typeof attachEvent === 'function') {
+		document.attachEvent('onclick', function(e) {
+			fireCallbacks(e);
+		});
+	}
+
+	function fireCallbacks(e) {
+		var el = e.target,
+			ident = e.target.getAttribute('data-whisper-id');
+
+		if (eventsCache[ident] !== undefined && eventsCache[ident]['click'] !== undefined) {
+			for (var i = 0; i < eventsCache[ident]['click'].length; i++) {
+				eventsCache[ident]['click'][i]();
+			}
+		}
 	}
 
 	function addListener(el, event, callback) {
@@ -57,6 +66,7 @@
 		}
 	}
 
+	// Necessary to track DOM elements with listeners added
 	function generateId() {
 		return Math.floor(Math.random() * 1000000) + ((new Date).getTime()).toString();
 	}
