@@ -1,8 +1,20 @@
 mocha.setup('bdd');
 var expect = chai.expect;
 
-describe('add listener', function () {
+function click(el){
+    var ev = document.createEvent("MouseEvent");
+    ev.initMouseEvent(
+        "click",
+        true /* bubble */, true /* cancelable */,
+        window, null,
+        0, 0, 0, 0, /* coordinates */
+        false, false, false, false, /* modifier keys */
+        0 /*left*/, null
+    );
+    el.dispatchEvent(ev);
+}
 
+describe('add listener', function () {
   it('adds an id to element', function () {
     var test_el = document.getElementById("test_el");
     $W(test_el).on('click', function() {
@@ -18,7 +30,7 @@ describe('add listener', function () {
     $W(test_el).on('click', function() {
     	test_var = true;
     });
-    test_el.click();
+    click(test_el);
     expect(test_var).to.be.ok;
   });
 });
@@ -31,7 +43,7 @@ describe('remove listener', function() {
     	test_var = true;
     });
     $W(test_el).off('click');
-    test_el.click();
+    click(test_el);
     expect(test_var).to.not.be.ok;
 	})
 })
