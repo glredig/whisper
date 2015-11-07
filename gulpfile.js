@@ -1,9 +1,9 @@
 var gulp = require('gulp');
 var mochaPhantomJS = require('gulp-mocha-phantomjs');
-
-gulp.task('default', function() {
-  // place code for your default task here
-});
+var rename = require('gulp-rename');
+var uglify = require('gulp-uglify');
+var bump = require('gulp-bump');
+var replace = require('gulp-replace');
 
 gulp.task('test', function () {
   return gulp
@@ -12,10 +12,23 @@ gulp.task('test', function () {
 });
 
 gulp.task('dist-combined', function() {
-	gulp.src('.src/whisper.js')
-		.pipe(plugins.rename('whisper.js'))
-		.pipe(gulp.dest('./dist'))
-		.pipe(plugins.uglify())
-		.pipe(plugins.rename('whisper.min.js'))
-      	.pipe(gulp.dest('./dist'));
-})
+  var pkg = require('./package.json');
+	
+  gulp.src('./src/whisper.js')
+	.pipe(replace('{{ version }}', pkg.version))
+	.pipe(rename('whisper.js'))
+	.pipe(gulp.dest('./dist'))
+	.pipe(uglify())
+	.pipe(rename('whisper.min.js'))
+  	.pipe(gulp.dest('./dist'));
+});
+
+function updateVersion(importance) {
+  return gulp.src('./package.json')
+    .pipe(bump({ type: importance }))
+    .pipe(gulp.dest('./'));
+}
+
+gulp.task('patch-release', function() { return updateVersion('patch'); });
+gulp.task('minor-release', function() { return updateVersion('minor'); });
+gulp.task('major-release', function() { return updateVersion('major'); });

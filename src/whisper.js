@@ -1,3 +1,10 @@
+/*!
+  WhisperJS click event delegation {{ version }}
+  Gabriel Redig
+  License: MIT
+*/
+
+
 (function(window) {
 	if (window.$W !== undefined) {
 		return $W;

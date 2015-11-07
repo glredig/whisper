@@ -19,6 +19,7 @@
   "devDependencies": {
     "chai": "^3.4.0",
     "gulp": "^3.9.0",
+    "gulp-bump": "^1.0.0",
     "gulp-mocha-phantomjs": "^0.10.1",
     "gulp-rename": "^1.2.2",
     "gulp-replace": "^0.5.4",
